@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <groupId>org.invisibletech</groupId>
+ <artifactId>life</artifactId>
+ <version>0.0.1-SNAPSHOT</version>
+ <packaging>jar</packaging>
+
+ <properties>
+  <java.version>15</java.version>
+  <slf4j.version>1.7.32</slf4j.version>
+  <spring.version>5.3.9</spring.version>
+  <log4j.version>1.2.16</log4j.version>
+  <lwgl.version>3.2.1</lwgl.version>
+  <jupiter.version>5.6.0</jupiter.version>
+  <assert.version>3.15.0</assert.version>
+  <mockito.version>3.3.0</mockito.version>
+  <maven.compiler.source>${java.version}</maven.compiler.source>
+  <maven.compiler.target>${java.version}</maven.compiler.target>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+ </properties>
+
+ <dependencies>
+  <dependency>
+   <groupId>org.springframework</groupId>
+   <artifactId>spring-beans</artifactId>
+   <version>${spring.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.springframework</groupId>
+   <artifactId>spring-context-support</artifactId>
+   <version>${spring.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-log4j12</artifactId>
+   <version>${slf4j.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>log4j</groupId>
+   <artifactId>log4j</artifactId>
+   <version>${log4j.version}</version>
+   <scope>runtime</scope>
+  </dependency>
+  <!-- Test Dependencies -->
+  <dependency>
+   <groupId>org.junit.jupiter</groupId>
+   <artifactId>junit-jupiter</artifactId>
+   <version>${jupiter.version}</version>
+   <scope>test</scope>
+  </dependency>
+  <dependency>
+   <groupId>org.assertj</groupId>
+   <artifactId>assertj-core</artifactId>
+   <version>${assert.version}</version>
+   <scope>test</scope>
+  </dependency>
+  <dependency>
+   <groupId>org.mockito</groupId>
+   <artifactId>mockito-core</artifactId>
+   <version>${mockito.version}</version>
+   <scope>test</scope>
+  </dependency>
+ </dependencies>
+
+ <!-- BUILD -->
+ <!-- For now leaving the versions for plug-ins as is. In practice would 
+  probably move the specification to a parent POM and maybe a BOM for multiple 
+  parent module situation. -->
+ <build>
+  <pluginManagement>
+   <!-- lock down plug-ins versions to avoid using Maven defaults (may be 
+    moved to parent pom) -->
+   <plugins>
+    <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+    <plugin>
+     <artifactId>maven-clean-plugin</artifactId>
+     <version>3.1.0</version>
+    </plugin>
+    <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+    <plugin>
+     <artifactId>maven-resources-plugin</artifactId>
+     <version>3.0.2</version>
+    </plugin>
+    <plugin>
+     <artifactId>maven-compiler-plugin</artifactId>
+     <version>3.8.0</version>
+    </plugin>
+    <plugin>
+     <artifactId>maven-surefire-plugin</artifactId>
+     <version>2.22.0</version>
+    </plugin>
+    <plugin>
+     <artifactId>maven-jar-plugin</artifactId>
+     <version>3.0.2</version>
+    </plugin>
+    <plugin>
+     <artifactId>maven-install-plugin</artifactId>
+     <version>2.5.2</version>
+    </plugin>
+    <plugin>
+     <artifactId>maven-deploy-plugin</artifactId>
+     <version>2.8.2</version>
+    </plugin>
+    <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+    <plugin>
+     <artifactId>maven-site-plugin</artifactId>
+     <version>3.7.1</version>
+    </plugin>
+    <plugin>
+     <artifactId>maven-project-info-reports-plugin</artifactId>
+     <version>3.0.0</version>
+    </plugin>
+   </plugins>
+  </pluginManagement>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+     <!-- Originally had release here which makes Maven hate on us for using 
+      the internal annotation we export below -->
+     <source>11</source>
+     <target>11</target>
+     <compilerArgs>
+     </compilerArgs>
+    </configuration>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <configuration>
+    </configuration>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-failsafe-plugin</artifactId>
+    <version>2.22.0</version>
+    <configuration>
+    </configuration>
+   </plugin>
+  </plugins>
+ </build>
+
+</project>
