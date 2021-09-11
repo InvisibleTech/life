@@ -1,42 +1,29 @@
 package org.invisibletech.life.engine;
 
-import java.util.Arrays;
-import java.util.function.Function;
-import java.util.stream.IntStream;
-
 import org.invisibletech.life.board.BoardFactory;
+import org.invisibletech.life.board.CellMat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * Represents a game board for the Game Of Life. It supports the computation of
+ * Represents an instance for the Game Of Life. It supports the computation of
  * the next board and returning a safe copy of the state. See method
  * documentation for details.
  *
- * This board is finite and cells beyond the border are treated as dead.
- *
- * @author johnferguson
+ * This game treats the board as finite and cells beyond the border are treated
+ * as dead.
  *
  */
-public final class CellsFinite implements CellsEngine {
+public final class CellsFinite implements CellsGameEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(CellsFinite.class);
-
-  private static final Function<boolean[][], String> DUMP_BOARD = (b) -> Arrays
-      .toString(Arrays.stream(b).map(Arrays::toString).toArray());
-
-  private final int width;
-  private final int height;
-
-  private boolean[][] board;
+  private CellMat board;
 
   @Autowired
   CellsFinite(@Value("${life.board.width:5}") final int width, @Value("${life.board.height:5}") final int height,
       final BoardFactory boardFactory) {
     LOGGER.info("Creating board with dimensions {} x {}", height, width);
-    this.width = width;
-    this.height = height;
     board = boardFactory.createBoard(height, width);
   }
 
@@ -58,28 +45,27 @@ public final class CellsFinite implements CellsEngine {
    *
    */
   @Override
-  public boolean[][] computeNextBoard() {
-    final var nextBoard = new boolean[height][width];
-    LOGGER.debug("Compute next board for {}", DUMP_BOARD.apply(board));
+  public CellMat computeNextBoard() {
+    final var nextBoard = new CellMat(board.matrixOf());
+    LOGGER.debug("Compute next board for {}", board);
 
-    for (var row = 0; row < height; row++) {
-      for (var col = 0; col < width; col++) {
+    for (var row = 0; row < board.getRows(); row++) {
+      for (var col = 0; col < board.getCols(); col++) {
         final var livingNeighbors = countNeighborhood(row, col);
         LOGGER.debug("Living neighbors for [{},{}] == {}", row, col, livingNeighbors);
 
-        if (board[row][col]) {
-          nextBoard[row][col] = livingNeighbors == 2 || livingNeighbors == 3;
+        if (board.cellAt(row, col)) {
+          nextBoard.setCell(row, col, livingNeighbors == 2 || livingNeighbors == 3);
         } else {
-          nextBoard[row][col] = livingNeighbors == 3;
+          nextBoard.setCell(row, col, livingNeighbors == 3);
         }
       }
     }
 
-    LOGGER.debug("Next board {}", DUMP_BOARD.apply(nextBoard));
+    LOGGER.debug("Next board {}", nextBoard);
 
     board = nextBoard;
 
-    // return safe copy of board to avoid giving accidental access to internal state
     return currentBoard();
   }
 
@@ -97,22 +83,23 @@ public final class CellsFinite implements CellsEngine {
 
     final var previousRow = row - 1;
     final var leftStart = Math.max(0, col - 1);
-    final var rightEnd = Math.min(col + 1, width - 1);
+    final var rightEnd = Math.min(col + 1, board.getCols() - 1);
 
     if (previousRow >= 0) {
+      // board.rowLives(previousRow, leftStart, rightEnd);
       for (var currCol = leftStart; currCol <= rightEnd; currCol++) {
-        liveCount += board[previousRow][currCol] ? 1 : 0;
+        liveCount += board.cellAt(previousRow, currCol) ? 1 : 0;
       }
     }
 
     for (var currCol = leftStart; currCol <= rightEnd; currCol++) {
-      liveCount += board[row][currCol] && col != currCol ? 1 : 0;
+      liveCount += col != currCol && board.cellAt(row, currCol) ? 1 : 0;
     }
 
     final var nextRow = row + 1;
-    if (nextRow < height) {
+    if (nextRow < board.getRows()) {
       for (var currCol = leftStart; currCol <= rightEnd; currCol++) {
-        liveCount += board[nextRow][currCol] ? 1 : 0;
+        liveCount += board.cellAt(nextRow, currCol) ? 1 : 0;
       }
     }
 
@@ -120,11 +107,7 @@ public final class CellsFinite implements CellsEngine {
   }
 
   @Override
-  public boolean[][] currentBoard() {
-    final var safeCopy = new boolean[height][width];
-
-    IntStream.range(0, height).forEach(r -> System.arraycopy(board[r], 0, safeCopy[r], 0, width));
-
-    return safeCopy;
+  public CellMat currentBoard() {
+    return new CellMat(this.board);
   }
 }

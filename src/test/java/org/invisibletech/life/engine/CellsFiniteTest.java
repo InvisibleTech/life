@@ -1,34 +1,84 @@
 package org.invisibletech.life.engine;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.invisibletech.life.board.CellMat;
 import org.junit.jupiter.api.Test;
 
 class CellsFiniteTest {
-
   private static final boolean ALIVE = true;
 
   @Test
-  void computeNextBoardOnDeadBoard() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> new boolean[h][w]);
+  void computeNextBoardDoesNotChangeDimensions() {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+        {
+            false, false, false
+        }, {
+            false, false, false
+        }, {
+            false, false, false
+        },
+    }));
 
-    assertArrayEquals(new boolean[3][3], underTest.computeNextBoard());
+    final var beforeNext = underTest.currentBoard();
+    assertEquals(3, beforeNext.getRows());
+    assertEquals(3, beforeNext.getCols());
+
+    final var nextBoard = underTest.computeNextBoard();
+    assertEquals(3, nextBoard.getRows());
+    assertEquals(3, nextBoard.getCols());
+  }
+
+  @Test
+  void computeNextBoardOnDeadBoard() {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+        {
+            false, false, false
+        }, {
+            false, false, false
+        }, {
+            false, false, false
+        },
+    }));
+
+    assertArrayEquals(new Boolean[][] {
+        {
+            false, false, false
+        }, {
+            false, false, false
+        }, {
+            false, false, false
+        },
+    }, underTest.computeNextBoard().matrixOf());
   }
 
   @Test
   void computeNextBoardWithOneLife() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> {
-      final var b = new boolean[h][w];
-      b[0][0] = ALIVE;
-      return b;
-    });
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+        {
+            ALIVE, false, false
+        }, {
+            false, false, false
+        }, {
+            false, false, false
+        },
+    }));
 
-    assertArrayEquals(new boolean[3][3], underTest.computeNextBoard());
+    assertArrayEquals(new Boolean[][] {
+        {
+            false, false, false
+        }, {
+            false, false, false
+        }, {
+            false, false, false
+        },
+    }, underTest.computeNextBoard().matrixOf());
   }
 
   @Test
   void computeNextBoardForStable2NeighborPattern() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> new boolean[][] {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
         {
             false, ALIVE, false
         }, {
@@ -36,9 +86,9 @@ class CellsFiniteTest {
         }, {
             false, ALIVE, false
         },
-    });
+    }));
 
-    final var expected = new boolean[][] {
+    final var expected = new Boolean[][] {
         {
             false, ALIVE, false
         }, {
@@ -48,13 +98,13 @@ class CellsFiniteTest {
         }
     };
 
-    assertArrayEquals(expected, underTest.computeNextBoard());
-    assertArrayEquals(expected, underTest.computeNextBoard());
+    assertArrayEquals(expected, underTest.computeNextBoard().matrixOf());
+    assertArrayEquals(expected, underTest.computeNextBoard().matrixOf());
   }
 
   @Test
   void computeNextBoardForStable3NeighborPattern() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> new boolean[][] {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
         {
             ALIVE, ALIVE, false
         }, {
@@ -62,9 +112,9 @@ class CellsFiniteTest {
         }, {
             false, false, false
         },
-    });
+    }));
 
-    final var expected = new boolean[][] {
+    final var expected = new Boolean[][] {
         {
             ALIVE, ALIVE, false
         }, {
@@ -74,13 +124,13 @@ class CellsFiniteTest {
         }
     };
 
-    assertArrayEquals(expected, underTest.currentBoard());
-    assertArrayEquals(expected, underTest.computeNextBoard());
+    assertArrayEquals(expected, underTest.currentBoard().matrixOf());
+    assertArrayEquals(expected, underTest.computeNextBoard().matrixOf());
   }
 
   @Test
   void computeNextBoardFor4Neighbors() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> new boolean[][] {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
         {
             false, ALIVE, false
         }, {
@@ -88,9 +138,9 @@ class CellsFiniteTest {
         }, {
             false, ALIVE, false
         }
-    });
+    }));
 
-    assertArrayEquals(new boolean[][] {
+    assertArrayEquals(new Boolean[][] {
         {
             ALIVE, ALIVE, ALIVE
         }, {
@@ -98,12 +148,12 @@ class CellsFiniteTest {
         }, {
             ALIVE, ALIVE, ALIVE
         }
-    }, underTest.computeNextBoard());
+    }, underTest.computeNextBoard().matrixOf());
   }
 
   @Test
   void computeNextBoardForBurstingRing() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> new boolean[][] {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
         {
             ALIVE, ALIVE, ALIVE
         }, {
@@ -111,9 +161,9 @@ class CellsFiniteTest {
         }, {
             ALIVE, ALIVE, ALIVE
         },
-    });
+    }));
 
-    assertArrayEquals(new boolean[][] {
+    assertArrayEquals(new Boolean[][] {
         {
             ALIVE, false, ALIVE
         }, {
@@ -121,12 +171,12 @@ class CellsFiniteTest {
         }, {
             ALIVE, false, ALIVE
         }
-    }, underTest.computeNextBoard());
+    }, underTest.computeNextBoard().matrixOf());
   }
 
   @Test
   void computeNextBoardWhereNewLifeJoins() {
-    final CellsEngine underTest = new CellsFinite(3, 3, (h, w) -> new boolean[][] {
+    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
         {
             ALIVE, ALIVE, false
         }, {
@@ -134,9 +184,9 @@ class CellsFiniteTest {
         }, {
             false, false, false
         }
-    });
+    }));
 
-    assertArrayEquals(new boolean[][] {
+    assertArrayEquals(new Boolean[][] {
         {
             ALIVE, ALIVE, false
         }, {
@@ -144,13 +194,13 @@ class CellsFiniteTest {
         }, {
             false, false, false
         }
-    }, underTest.computeNextBoard());
+    }, underTest.computeNextBoard().matrixOf());
     ;
   }
 
   @Test
   void computeNext4By4BoardForStable2NeighborPattern() {
-    final CellsEngine underTest = new CellsFinite(4, 4, (h, w) -> new boolean[][] {
+    final CellsGameEngine underTest = new CellsFinite(4, 4, (h, w) -> new CellMat(new Boolean[][] {
         {
             false, ALIVE, false, false
         }, {
@@ -160,10 +210,9 @@ class CellsFiniteTest {
         }, {
             false, false, false, false
         }
+    }));
 
-    });
-
-    final var expected = new boolean[][] {
+    final var expected = new Boolean[][] {
         {
             false, ALIVE, false, false
         }, {
@@ -174,8 +223,7 @@ class CellsFiniteTest {
             false, false, false, false
         }
     };
-    assertArrayEquals(expected, underTest.computeNextBoard());
-    assertArrayEquals(expected, underTest.computeNextBoard());
+    assertArrayEquals(expected, underTest.computeNextBoard().matrixOf());
+    assertArrayEquals(expected, underTest.computeNextBoard().matrixOf());
   }
-
 }
