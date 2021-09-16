@@ -1,8 +1,8 @@
-package org.invisibletech.life.engine;
+package org.invisibletech.life.game;
 
-import org.invisibletech.life.board.CellMat;
+import org.invisibletech.life.board.Board;
 
-public interface CellsGameEngine {
+public interface Game {
   /**
    * Compute the next board based on the current board and then replace the board
    * with the new board. This is pretty much like a back buffer render and swap in
@@ -20,11 +20,10 @@ public interface CellsGameEngine {
    * @return a safe copy of the newly computed board state.
    *
    */
-  CellMat computeNextBoard();
+  Board computeNextBoard();
 
   /**
-   * @return a safe copy of the current board state. CellMat is mutable and so we
-   *         cannot and should not give access of it to others.
+   * @return a safe copy of the current board state.
    */
-  CellMat currentBoard();
+  Board currentBoard();
 }

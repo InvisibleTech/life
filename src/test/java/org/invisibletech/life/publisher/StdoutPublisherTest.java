@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.invisibletech.life.board.CellMat;
+import org.invisibletech.life.board.Board;
 import org.junit.jupiter.api.Test;
 
 class StdoutPublisherTest {
@@ -16,7 +16,7 @@ class StdoutPublisherTest {
 
     System.setOut(new PrintStream(captureStdOut));
 
-    new StdoutPublisher().render(new CellMat(new Boolean[][] {
+    new StdoutPublisher().render(new Board(new Boolean[][] {
         {
             true, false
         }, {

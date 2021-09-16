@@ -9,17 +9,17 @@ import java.util.stream.Stream;
  * The core ADT of it all, the cell matrix. The design intention here is to
  * group operations that belong to the ADT here.
  */
-public class CellMat {
+public class Board {
   private final Boolean[][] cells;
   private final int rows;
   private final int cols;
 
   /**
-   * Create a new CellMat from given one. Deep copy mutable data.
+   * Create a new Board from given one. Deep copy mutable data.
    *
    * @param src source to copy
    */
-  public CellMat(final CellMat src) {
+  public Board(final Board src) {
     this(src.cells);
   }
 
@@ -30,7 +30,7 @@ public class CellMat {
    * @param matrix source matrix for dimensions and data.
    * @throws IndexOutOfBoundsException if source matrix is not regular
    */
-  public CellMat(final Boolean[][] matrix) {
+  public Board(final Boolean[][] matrix) {
     this.rows = matrix.length;
     this.cols = matrix.length > 0 ? matrix[0].length : 0;
     this.cells = new Boolean[this.rows][this.cols];
@@ -87,7 +87,7 @@ public class CellMat {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    final var other = (CellMat) obj;
+    final var other = (Board) obj;
     return Arrays.deepEquals(cells, other.cells) && cols == other.cols && rows == other.rows;
   }
 

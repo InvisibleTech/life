@@ -1,13 +1,13 @@
 package org.invisibletech.life.publisher;
 
-import org.invisibletech.life.board.CellMat;
+import org.invisibletech.life.board.Board;
 
 /**
- * Publishing a board minimally means writing it somewhere and this interface is
- * pretty minimal. At this time it has one function and so could be met using a
- * lambda. This may be more useful in tests, but for now seems like a good idea.
+ * Publishing a board, at minimum means, writing it somewhere. Since there is
+ * only one method this is also defined as a {@link FunctionalInterface} to
+ * support using lambdas.
  */
 @FunctionalInterface
 public interface BoardPublisher {
-  void render(CellMat cellMat);
+  void render(Board board);
 }

@@ -3,15 +3,17 @@ package org.invisibletech.life.engine;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.invisibletech.life.board.CellMat;
+import org.invisibletech.life.board.Board;
+import org.invisibletech.life.game.FiniteBoardGame;
+import org.invisibletech.life.game.Game;
 import org.junit.jupiter.api.Test;
 
-class CellsFiniteTest {
+class FiniteBoardTest {
   private static final boolean ALIVE = true;
 
   @Test
   void computeNextBoardDoesNotChangeDimensions() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             false, false, false
         }, {
@@ -32,7 +34,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardOnDeadBoard() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             false, false, false
         }, {
@@ -55,7 +57,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardWithOneLife() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             ALIVE, false, false
         }, {
@@ -78,7 +80,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardForStable2NeighborPattern() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             false, ALIVE, false
         }, {
@@ -104,7 +106,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardForStable3NeighborPattern() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             ALIVE, ALIVE, false
         }, {
@@ -130,7 +132,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardFor4Neighbors() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             false, ALIVE, false
         }, {
@@ -153,7 +155,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardForBurstingRing() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             ALIVE, ALIVE, ALIVE
         }, {
@@ -176,7 +178,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNextBoardWhereNewLifeJoins() {
-    final CellsGameEngine underTest = new CellsFinite(3, 3, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(3, 3, (h, w) -> new Board(new Boolean[][] {
         {
             ALIVE, ALIVE, false
         }, {
@@ -200,7 +202,7 @@ class CellsFiniteTest {
 
   @Test
   void computeNext4By4BoardForStable2NeighborPattern() {
-    final CellsGameEngine underTest = new CellsFinite(4, 4, (h, w) -> new CellMat(new Boolean[][] {
+    final Game underTest = new FiniteBoardGame(4, 4, (h, w) -> new Board(new Boolean[][] {
         {
             false, ALIVE, false, false
         }, {

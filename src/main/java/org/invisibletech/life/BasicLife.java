@@ -1,22 +1,26 @@
 package org.invisibletech.life;
 
-import org.invisibletech.life.engine.CellsGameEngine;
+import org.invisibletech.life.game.Game;
 import org.invisibletech.life.publisher.BoardPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * A Non-concurrent Game of Life.
+ * A Game Of Life application using a loop of finite iterations. The main
+ * purpose is to provide a simple way to a run some iterations of the game.
+ * 
+ * Use a brief sleep to make the output a little more like an animation.
  */
 public class BasicLife {
-  public static void main(final String[] args) {
+  public static void main(final String[] args) throws InterruptedException {
     try (final ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
         "classpath:spring/basic_application_context.xml");) {
-      final var cellScape = context.getBean(CellsGameEngine.class);
+      final var game = context.getBean(Game.class);
       final var publisher = context.getBean(BoardPublisher.class);
-      publisher.render(cellScape.currentBoard());
+      publisher.render(game.currentBoard());
       for (var i = 0; i < 30; i++) {
-        publisher.render(cellScape.computeNextBoard());
+        Thread.sleep(1000);
+        publisher.render(game.computeNextBoard());
       }
     }
   }

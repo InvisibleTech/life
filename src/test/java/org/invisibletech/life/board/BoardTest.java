@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-class CellMatTest {
+class BoardTest {
   @Test
   void enforcesRegularMatrix() {
-    assertThrows(IndexOutOfBoundsException.class, () -> new CellMat(new Boolean[][] {
+    assertThrows(IndexOutOfBoundsException.class, () -> new Board(new Boolean[][] {
         {
             true, true
         }, {
@@ -22,7 +22,7 @@ class CellMatTest {
 
   @Test
   void canCreateWithExpectedState() {
-    final var underTest = new CellMat(new Boolean[][] {
+    final var underTest = new Board(new Boolean[][] {
         {
             true, true
         }, {
@@ -49,7 +49,7 @@ class CellMatTest {
 
   @Test
   void shouldSupportMutation() {
-    final var underTest = new CellMat(new Boolean[][] {
+    final var underTest = new Board(new Boolean[][] {
         {
             true, true
         }, {
@@ -64,7 +64,7 @@ class CellMatTest {
 
   @Test
   void copyConstructionShouldProduce() {
-    final var underTest = new CellMat(new Boolean[][] {
+    final var underTest = new Board(new Boolean[][] {
         {
             true, true
         }, {
@@ -72,7 +72,7 @@ class CellMatTest {
         },
     });
 
-    final var copy = new CellMat(underTest);
+    final var copy = new Board(underTest);
     assertEquals(underTest, copy);
     assertEquals(underTest.hashCode(), copy.hashCode());
 

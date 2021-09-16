@@ -7,5 +7,5 @@ package org.invisibletech.life.board;
  */
 @FunctionalInterface
 public interface BoardFactory {
-  CellMat createBoard(int height, int width);
+  Board createBoard(int height, int width);
 }

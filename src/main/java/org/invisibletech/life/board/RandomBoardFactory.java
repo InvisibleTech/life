@@ -7,9 +7,9 @@ import java.util.stream.IntStream;
 /**
  * Generate a board using Random booleans.
  */
-public class RandomBoard implements BoardFactory {
+public class RandomBoardFactory implements BoardFactory {
   @Override
-  public CellMat createBoard(final int height, final int width) {
+  public Board createBoard(final int height, final int width) {
     final var rand = new Random();
 
     final var matrix = IntStream.range(0, height).mapToObj(i -> {
@@ -18,6 +18,6 @@ public class RandomBoard implements BoardFactory {
       return row;
     }).toArray(Boolean[][]::new);
 
-    return new CellMat(matrix);
+    return new Board(matrix);
   }
 }

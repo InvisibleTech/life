@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class RandomBoardTest {
   @Test
   void createBoardMakesRectangularBoard() {
-    final var board = new RandomBoard().createBoard(3, 4);
+    final var board = new RandomBoardFactory().createBoard(3, 4);
     assertEquals(3, board.getRows());
     assertEquals(4, board.getCols());
 
